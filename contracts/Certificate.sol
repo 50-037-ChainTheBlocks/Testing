@@ -46,7 +46,7 @@ contract CertChain is Ownable{
         uint _graduatingYear,
         uint _enrolledYear,
         address _recipient
-    ) public{
+    ) public returns (bool){
         require(registeredInstitution[msg.sender]==true,"This institution address is not registered.");
         
         string memory institutionName = instAddrToName[msg.sender];
@@ -66,6 +66,7 @@ contract CertChain is Ownable{
         certChain[certhash]=_recipient;
         issuedCertificateHash[certhash]=true;
         storageCert[_recipient].push(cert);
+        return true;
     }
     
     function verifyCertificate(
@@ -88,10 +89,3 @@ contract CertChain is Ownable{
     }
 
 }
-   
-
-
-
-
-
-   
