@@ -18,8 +18,6 @@ Install Truffle: `npm install -g truffle`
 &nbsp; &nbsp; Any address will be able to verify a certificate. If valid, returns True.  
 **√ should allow anyone to verify INVALID cert**          
 &nbsp; &nbsp; Any address will be able to verify a certificate. If invalid, returns False.  
-**√ should allow only the recipient to see all his cert correctly**          
-&nbsp; &nbsp; Gets all the certificate issued to the address that called the function.
 
 ## To Run
 In this directory, run `truffle compile`.  

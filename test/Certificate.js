@@ -117,17 +117,4 @@ contract("CertChain test",async accounts => {
             assert.fail("Unexpected error received: "+error)
         }
     })
-
-    
-    it("should allow only the recipient to see all his cert correctly",async ()=>{
-        const instance=await Cert.deployed();
-        try{
-            const allCerts=await instance.getAllMyCertificates({from:john_addr})
-            assert.equal(allCerts.length,1)
-            assert.deepEqual([allCerts[0].name,allCerts[0].course,allCerts[0].degree,allCerts[0].institutionName,allCerts[0].graduatingYear,allCerts[0].enrolledYear,allCerts[0].recipient,allCerts[0].issuer],
-                [john_name,"ISTD","Degree", sutd_name,"2021","2018",john_addr,sutd_addr])
-        }catch(error){
-            assert.fail("Unexpected error received: "+error)
-        }
-    })
 })
