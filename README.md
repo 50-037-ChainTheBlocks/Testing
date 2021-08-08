@@ -1,7 +1,7 @@
 # Testing
 ## Requirements
 Install NodeJS: https://nodejs.org/en/download/  
-Install Truffle: `npm install -g truffle` 
+Install Truffle: `npm install -g truffle`   
 Install web3-utils: `npm install web3-utils` 
 
 ## The Tests  
