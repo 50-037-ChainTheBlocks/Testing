@@ -1,4 +1,5 @@
 const Cert = artifacts.require("CertChain");
+const { soliditySha3 } = require("web3-utils");
 
 contract("CertChain test",async accounts => {
     const authority_addr=accounts[0] //by default, accounts[0] is the address that deployed the contract
@@ -12,15 +13,17 @@ contract("CertChain test",async accounts => {
         const instance=await Cert.deployed();
         const reason="This institution address is not registered."
         try{
-            await instance.issueCertificate(
+            var certhash =soliditySha3(
                 john_name,
                 "ISTD",
                 "Degree",
+                sutd_name,
                 2021,
                 2018,
                 john_addr,
-                {from :sutd_addr}
+                sutd_addr
             )
+            await instance.issueCertificate(certhash, john_addr,{from :sutd_addr})
         }catch(error){
             // console.log(error.reason)
             assert(error.reason==reason,"Expected error but did not get one")
@@ -50,15 +53,17 @@ contract("CertChain test",async accounts => {
     it("should allow registered institution to issue cert",async ()=>{
         const instance=await Cert.deployed();
         try{
-            await instance.issueCertificate(
+            var certhash =soliditySha3(
                 john_name,
                 "ISTD",
                 "Degree",
+                sutd_name,
                 2021,
                 2018,
                 john_addr,
-                {from :sutd_addr}
+                sutd_addr
             )
+            await instance.issueCertificate(certhash, john_addr,{from :sutd_addr})
         }catch(error){
             assert.fail("Unexpected error received: "+error)
         }
@@ -68,15 +73,17 @@ contract("CertChain test",async accounts => {
         const instance=await Cert.deployed();
         const reason = "This certificate is already issued."
         try{
-            await instance.issueCertificate(
+            var certhash =soliditySha3(
                 john_name,
                 "ISTD",
                 "Degree",
+                sutd_name,
                 2021,
                 2018,
                 john_addr,
-                {from :sutd_addr}
+                sutd_addr
             )
+            await instance.issueCertificate(certhash, john_addr,{from :sutd_addr})
         }catch(error){
             assert(error.reason==reason,"Expected error but did not get one")
         }
@@ -85,7 +92,7 @@ contract("CertChain test",async accounts => {
     it("should allow anyone to verify VALID cert",async ()=>{
         const instance=await Cert.deployed();
         try{
-            const isIssued=await instance.verifyCertificate(
+            var validcerthash =soliditySha3(
                 john_name,
                 "ISTD",
                 "Degree",
@@ -93,7 +100,9 @@ contract("CertChain test",async accounts => {
                 2021,
                 2018,
                 john_addr,
-                sutd_addr,{from: hr_addr})
+                sutd_addr
+            )
+            const isIssued=await instance.verifyCertificate(validcerthash,john_addr,{from: hr_addr})
             assert.equal(true,isIssued)
         }catch(error){
             assert.fail("Unexpected error received: "+error)
@@ -103,15 +112,17 @@ contract("CertChain test",async accounts => {
     it("should allow anyone to verify INVALID cert",async ()=>{
         const instance=await Cert.deployed();
         try{
-            const isIssued=await instance.verifyCertificate(
+            var invalidcerthash =soliditySha3(
                 john_name,
-                "ISTD",
-                "Masters", // THIS IS WRONG
+                "EPD", // WRONG info
+                "Degree",
                 sutd_name,
                 2021,
                 2018,
                 john_addr,
-                sutd_addr,{from: hr_addr})
+                sutd_addr
+            )
+            const isIssued=await instance.verifyCertificate(invalidcerthash,john_addr,{from: hr_addr})
             assert.equal(false,isIssued)
         }catch(error){
             assert.fail("Unexpected error received: "+error)
