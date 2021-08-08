@@ -23,7 +23,8 @@ contract("CertChain test",async accounts => {
                 john_addr,
                 sutd_addr
             )
-            await instance.issueCertificate(certhash, john_addr,{from :sutd_addr})
+            // await instance.issueCertificate(certhash, john_addr,{from :sutd_addr})
+            await instance.issueCertificate(certhash,{from :sutd_addr})
         }catch(error){
             // console.log(error.reason)
             assert(error.reason==reason,"Expected error but did not get one")
@@ -63,7 +64,7 @@ contract("CertChain test",async accounts => {
                 john_addr,
                 sutd_addr
             )
-            await instance.issueCertificate(certhash, john_addr,{from :sutd_addr})
+            await instance.issueCertificate(certhash,{from :sutd_addr})
         }catch(error){
             assert.fail("Unexpected error received: "+error)
         }
@@ -83,7 +84,7 @@ contract("CertChain test",async accounts => {
                 john_addr,
                 sutd_addr
             )
-            await instance.issueCertificate(certhash, john_addr,{from :sutd_addr})
+            await instance.issueCertificate(certhash,{from :sutd_addr})
         }catch(error){
             assert(error.reason==reason,"Expected error but did not get one")
         }
@@ -102,7 +103,7 @@ contract("CertChain test",async accounts => {
                 john_addr,
                 sutd_addr
             )
-            const isIssued=await instance.verifyCertificate(validcerthash,john_addr,{from: hr_addr})
+            const isIssued=await instance.verifyCertificate(validcerthash,{from: hr_addr})
             assert.equal(true,isIssued)
         }catch(error){
             assert.fail("Unexpected error received: "+error)
@@ -122,7 +123,7 @@ contract("CertChain test",async accounts => {
                 john_addr,
                 sutd_addr
             )
-            const isIssued=await instance.verifyCertificate(invalidcerthash,john_addr,{from: hr_addr})
+            const isIssued=await instance.verifyCertificate(invalidcerthash,{from: hr_addr})
             assert.equal(false,isIssued)
         }catch(error){
             assert.fail("Unexpected error received: "+error)

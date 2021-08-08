@@ -10,8 +10,8 @@ contract CertChain is Ownable{
     
     mapping(address=>bool) public registeredInstitution;
     mapping(address=>string) public instAddrToName;
-    mapping(bytes32=>address) public certChain; // cerificateHash => recipient's address
     mapping(bytes32=>bool) public issuedCertificateHash;
+    
     
     /* Institution */
     function registerInstitution(address _institutionAddr, string memory _name) public onlyOwner returns (string memory){
@@ -28,22 +28,19 @@ contract CertChain is Ownable{
     
     /* Certificate */
     function issueCertificate(
-        bytes32 certhash,
-        address _recipient
+        bytes32 certhash
     ) public returns (bool){
         require(registeredInstitution[msg.sender]==true,"This institution address is not registered.");
         
         require(issuedCertificateHash[certhash]==false,"This certificate is already issued.");
         
-        certChain[certhash]=_recipient;
         issuedCertificateHash[certhash]=true;
         return true;
     }
     
     function verifyCertificate(
-        bytes32 certhash,
-        address _recipient
+        bytes32 certhash
     ) view public returns (bool){
-        return certChain[certhash]==_recipient;
+        return issuedCertificateHash[certhash];
     }
 }
